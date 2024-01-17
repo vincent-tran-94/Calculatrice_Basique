@@ -1,0 +1,9 @@
+version: "3"
+services:
+  application:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/app
+

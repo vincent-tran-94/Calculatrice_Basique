@@ -1,0 +1,13 @@
+--Build une image de l'application avec un fichier Dockerfile--
+
+sudo docker image build -t flask_docker Linux
+docker-compose build Windows 
+
+--Création du conteneur à partir d'une image et de lancer par la suite--
+
+sudo docker run -p 5000:5000 flask_docker
+
+-- Lancement de la commande docker compose --
+
+docker-compose up Windows 
+sudo docker-compose up 

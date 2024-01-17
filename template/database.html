@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <a href = "/"> Revenir à la page d'accueil </a>
+        <table>
+        <thead>
+            <td> Expressions </td>
+            <td> Resultats </td>
+        </thead>
+        {% for row in rows %}
+        <tr> 
+            <td>{{row["expression"]}} </td>
+            <td>{{row["resultat"]}} </td>
+        </tr>
+        {% endfor %}
+        </table>
+    </body>
+</html>

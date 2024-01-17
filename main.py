@@ -1,4 +1,8 @@
-from flask import Flask, send_file, request, render_template
+
+from flask import Flask, send_file, request, render_template, redirect, url_for, flash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user, login_required
+from main import * 
+from werkzeug.security import generate_password_hash, check_password_hash
 from calcule import calculatrice
 import sqlite3
 import csv
@@ -10,8 +14,76 @@ curl http://localhost:5000/api/affichage
 curl -X GET http://localhost:5000/export_csv
 """
 
-#Création de l'application Flask 
-app = Flask(__name__,template_folder='template')
+
+app = Flask(__name__, template_folder='template')
+app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a random secret key
+
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+
+class User(UserMixin):
+    def __init__(self, user_id):
+        self.id = user_id
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+
+# Your existing routes go here
+
+# Login route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # Vous devez vérifier les informations d'identification dans votre base de données
+        with sqlite3.connect("accounts.db") as con:
+            cur = con.cursor()
+            cur.execute("SELECT username, password FROM users WHERE username = ?;", (username,))
+            user_data = cur.fetchone()
+
+            if user_data and check_password_hash(user_data[1], password):
+                user = User(user_id=username)
+                login_user(user)
+                
+                return redirect(url_for('home'))  # Fix here
+            else:
+                flash("Invalid username or password", "error")  # Flash message for error
+
+    return render_template('login.html')
+
+
+# Logout route
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+
+# Registration route
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # Vous devez hasher le mot de passe avant de le stocker dans la base de données
+        hashed_password = generate_password_hash(password, method='sha256')
+
+        with sqlite3.connect("accounts.db") as con:
+            cur = con.cursor()
+            cur.execute("INSERT INTO users (username, password) VALUES (?, ?);", (username, hashed_password))
+            con.commit()
+
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
 
 #Insertion des opérations et des résultats sur la base de données calculateur avec l'API REST 
 @app.route('/evaluate', methods=['POST'])
@@ -39,7 +111,8 @@ def affichage():
 Application avec l'interface web
 """
 #Page d'accueil 
-@app.route('/')
+@app.route('/home')
+@login_required 
 def home():
    return render_template('home.html')
 
@@ -96,6 +169,11 @@ def export_csv():
 
     return send_file('operations.csv')
 
-#Lancement de l'application Flask
+
+
+
+# Your existing routes go here
+
+
 if __name__ == '__main__':
-    app.run('0.0.0.0',debug= True)
+    app.run('0.0.0.0', debug=True)

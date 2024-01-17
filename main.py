@@ -1,4 +1,3 @@
-
 from flask import Flask, send_file, request, render_template, redirect, url_for, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user, login_required
 from main import * 
@@ -13,7 +12,6 @@ curl -X POST -H "Content-Type: application/json" -d '{"expression": "2 3 + 5 *"}
 curl http://localhost:5000/api/affichage
 curl -X GET http://localhost:5000/export_csv
 """
-
 
 app = Flask(__name__, template_folder='template')
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a random secret key

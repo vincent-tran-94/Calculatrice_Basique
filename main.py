@@ -1,5 +1,5 @@
 from flask import Flask, send_file, request, render_template, redirect, url_for, flash, session
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, login_required, login_required
 from main import * 
 from werkzeug.security import generate_password_hash, check_password_hash
 from calcule import calculatrice

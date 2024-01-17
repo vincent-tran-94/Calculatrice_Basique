@@ -1,5 +1,5 @@
 
-from flask import Flask, send_file, request, render_template, redirect, url_for, flash
+from flask import Flask, send_file, request, render_template, redirect, url_for, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user, login_required
 from main import * 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -48,9 +48,9 @@ def login():
             user_data = cur.fetchone()
 
             if user_data and check_password_hash(user_data[1], password):
+                session['username'] = request.form['username']
                 user = User(user_id=username)
                 login_user(user)
-                
                 return redirect(url_for('home'))  # Fix here
             else:
                 flash("Invalid username or password", "error")  # Flash message for error
@@ -62,7 +62,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    logout_user()
+    session.pop('username', None)
     return redirect(url_for('home'))
 
 
@@ -70,15 +70,19 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        email = request.form['email']
         username = request.form['username']
         password = request.form['password']
+
 
         # Vous devez hasher le mot de passe avant de le stocker dans la base de données
         hashed_password = generate_password_hash(password, method='sha256')
 
         with sqlite3.connect("accounts.db") as con:
             cur = con.cursor()
-            cur.execute("INSERT INTO users (username, password) VALUES (?, ?);", (username, hashed_password))
+            cur.execute("INSERT INTO users (firstname,lastname,email, username, password) VALUES (?,?,?,?,?);", (firstname,lastname,email,username, hashed_password))
             con.commit()
 
         return redirect(url_for('login'))
@@ -114,15 +118,21 @@ Application avec l'interface web
 @app.route('/home')
 @login_required 
 def home():
-   return render_template('home.html')
+    if 'username' in session:
+        image_path = url_for('static', filename='calculatrice.jpg')
+        return render_template('home.html',image_path=image_path)
+    else:
+        return redirect(url_for('login'))
 
 #Page insertion des opérations pour effectuer le calculateur NPI
 @app.route('/insert')
+@login_required
 def insert():
    return render_template('insert.html')
 
 #Ajouter les opérations pour reconnaître sur une base de données
 @app.route('/add_operations',methods = ['POST'])
+@login_required
 def add_operations():
     if request.method == 'POST':
         try:
@@ -142,6 +152,7 @@ def add_operations():
 
 #Affichage de la base de données calculateur sur la page HTML 
 @app.route('/list')
+@login_required
 def list():
     con = sqlite3.connect("calculateur.db")
     con.row_factory = sqlite3.Row #Affichage ligne par ligne sur notre page HTML
@@ -153,6 +164,7 @@ def list():
 
 #Export le fichier CSV à partir d"une base de données calculateur
 @app.route('/export_csv',methods =["GET"])
+@login_required
 def export_csv():
     conn = sqlite3.connect('calculateur.db')
     c = conn.cursor()

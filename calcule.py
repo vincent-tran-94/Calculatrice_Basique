@@ -44,15 +44,3 @@ def calculatrice(expression):
 
     return pile_operandes[0]
 
-# # Exemples d'utilisation :
-# expression1 = "3 + 5 * ( 2 - 8 ) / 4"
-# expression2 = "2 * ( 5 + 7 )"
-# expression3 = "( 4 - 2 ) * ( 7 / ( 2 + 3 ) )"
-
-# resultat1 = calculatrice(expression1)
-# resultat2 = calculatrice(expression2)
-# resultat3 = calculatrice(expression3)
-
-# print("Résultat 1:", resultat1)
-# print("Résultat 2:", resultat2)
-# print("Résultat 3:", resultat3)

@@ -1,5 +1,5 @@
 from flask import Flask, send_file, request, render_template
-from calcule import calculatrice_NPI
+from calcule import calculatrice
 import sqlite3
 import csv
 
@@ -20,7 +20,7 @@ def evaluate():
     c = conn.cursor()
     data = request.get_json()
     expression = data['expression']
-    result = calculatrice_NPI(expression)
+    result = calculatrice(expression)
     c.execute("INSERT INTO operations VALUES (?, ?);", (expression, result))
     conn.commit() 
     return {'result': result}
@@ -54,7 +54,7 @@ def add_operations():
     if request.method == 'POST':
         try:
             expression = request.form['expression']
-            result = calculatrice_NPI(expression)
+            result = calculatrice(expression)
             with sqlite3.connect("calculateur.db") as con:
                 cur = con.cursor()
                 cur.execute("INSERT INTO operations VALUES (?, ?);", (expression, result))
@@ -98,4 +98,4 @@ def export_csv():
 
 #Lancement de l'application Flask
 if __name__ == '__main__':
-    app.run('0.0.0.0',debug= True,port=80)
+    app.run('0.0.0.0',debug= True)

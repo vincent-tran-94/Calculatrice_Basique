@@ -1,24 +1,18 @@
-#!/bin/bash
+sudo apt-get update
 
-# Update the package index
-sudo apt update
+sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
-# Install required dependencies
-sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-# Add the Docker GPG key
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+sudo echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
 
-# Set up the stable Docker repository
-echo "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
 
-# Update the package index again
-sudo apt update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
 
-# Install Docker
-sudo apt install -y docker-ce docker-ce-cli containerd.io
+sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
-# Add your user to the docker group to run Docker without sudo
-sudo usermod -aG docker $USER
 
-# Restart the system or log out and log back in to apply group changes
+
+
+

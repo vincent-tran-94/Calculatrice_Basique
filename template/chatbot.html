@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+<body>
+    <h1>Chat with MathBot</h1>
+    <form method="POST" action="{{ url_for('chatbot') }}">
+        {{ form.csrf_token }}
+        <label for="user_input">Your question:</label>
+        <input type="text" id="user_input" name="user_input" required>
+        <button type="submit">Ask</button>
+    </form>
+    {% if user_input %}
+        <p><strong>You:</strong> {{ user_input }}</p>
+        <p><strong>MathBot:</strong> {{ bot_response }}</p>
+    {% endif %}
+</body>
+</html>

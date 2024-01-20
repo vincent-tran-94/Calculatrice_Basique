@@ -29,7 +29,7 @@ def load_user(user_id):
     return User(user_id)
 
 
-# Your existing routes go here
+
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])

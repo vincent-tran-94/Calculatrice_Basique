@@ -6,7 +6,6 @@ import sqlite3
 import csv
 
 
-
 """
 MISE EN TEST sur CURL 
 curl -X POST -H "Content-Type: application/json" -d '{"expression": "2 3 + 5 *"}' http://localhost:5000/evaluate
@@ -146,7 +145,25 @@ def add_operations():
             con.rollback()
         finally:
             return render_template("result.html",msg = msg)
+        
+@app.route('/delete_operations', methods=['POST'])
+@login_required
+def delete_operations():
+    if request.method == 'POST':
+        try:
+            operation_id = request.form['operation_id']
 
+            with sqlite3.connect("calculateur.db") as con:
+                cur = con.cursor()
+                cur.execute("DELETE FROM operations WHERE id = ?;", (operation_id,))
+            
+            con.commit()
+            msg = "Opération supprimée avec succès !"
+        except:
+            msg = "Erreur lors de la suppression de l'opération"
+            con.rollback()
+        finally:
+            return render_template("result.html", msg=msg)
 
 #Affichage de la base de données calculateur sur la page HTML 
 @app.route('/list')

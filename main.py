@@ -5,6 +5,8 @@ from calcule import calculatrice
 import sqlite3
 import csv
 
+
+
 """
 MISE EN TEST sur CURL 
 curl -X POST -H "Content-Type: application/json" -d '{"expression": "2 3 + 5 *"}' http://localhost:5000/evaluate
@@ -27,9 +29,6 @@ class User(UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     return User(user_id)
-
-
-
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -63,6 +62,7 @@ def logout():
     return redirect(url_for('home'))
 
 
+
 # Registration route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -93,7 +93,8 @@ def evaluate():
     c = conn.cursor()
     data = request.get_json()
     expression = data['expression']
-    result = calculatrice(expression)
+    result, operation_type = calculatrice(expression)
+    operands_str = ' '.join(map(str, operation_type))
     c.execute("INSERT INTO operations VALUES (?, ?);", (expression, result))
     conn.commit() 
     return {'result': result}

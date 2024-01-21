@@ -18,10 +18,18 @@
 
     <form action="{{ url_for('add_operations') }}" method="POST" class="mt-3">
         <div class="mb-3">
-            <label for="expression" class="form-label">Écrivez votre expression de la calculatrice:</label>
-            <input type="text" name="expression" class="form-control" required>
+            <label for="expression" class="form-label">Écrivez votre expression à saisir </label>
+            <input type="text" name="expression" required>
+            <button type="submit" class="btn btn-primary"> Soumettre</button>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <form action="{{ url_for('delete_operation') }}" method="post">
+        <div class="mb-3">
+        <label for="expression">Ecrire votre expression à supprimer</label>
+        <input type="text" name="expression" required>
+        <button type="submit"  class="btn btn-primary" >Supprimer</button>
+        </div>
     </form>
 
     <!-- Ajoutez le lien vers Bootstrap JS et Popper.js (si nécessaire) -->

@@ -85,20 +85,19 @@ def register():
 
     return render_template('register.html')
 
-#Insertion des opérations et des résultats sur la base de données calculateur avec l'API REST 
+#Insertion des opérations et des résultats sur la base de données calculateur 
 @app.route('/evaluate', methods=['POST'])
 def evaluate():
     conn = sqlite3.connect('calculateur.db')
     c = conn.cursor()
     data = request.get_json()
     expression = data['expression']
-    result, operation_type = calculatrice(expression)
-    operands_str = ' '.join(map(str, operation_type))
+    result = calculatrice(expression)
     c.execute("INSERT INTO operations VALUES (?, ?);", (expression, result))
     conn.commit() 
     return {'result': result}
 
-#Affichage de la base de données calculateur avec l'API 
+#Affichage de la base de données calculateur 
 @app.route('/api/affichage')
 def affichage():
     conn = sqlite3.connect('calculateur.db')
@@ -146,24 +145,32 @@ def add_operations():
         finally:
             return render_template("result.html",msg = msg)
         
-@app.route('/delete_operations', methods=['POST'])
+# Ajoutez cette route pour supprimer une opération en utilisant une expression avec la méthode POST
+@app.route('/delete_operation', methods=['POST'])
 @login_required
-def delete_operations():
+def delete_operation():
     if request.method == 'POST':
-        try:
-            operation_id = request.form['operation_id']
+        expression = request.form['expression']
 
-            with sqlite3.connect("calculateur.db") as con:
-                cur = con.cursor()
-                cur.execute("DELETE FROM operations WHERE id = ?;", (operation_id,))
-            
-            con.commit()
-            msg = "Opération supprimée avec succès !"
-        except:
-            msg = "Erreur lors de la suppression de l'opération"
-            con.rollback()
-        finally:
-            return render_template("result.html", msg=msg)
+        conn = sqlite3.connect('calculateur.db')
+        c = conn.cursor()
+
+        # Vérifiez d'abord si l'opération existe dans la base de données
+        c.execute("SELECT * FROM operations WHERE expression = ?;", (expression,))
+        existing_operation = c.fetchone()
+
+        if existing_operation:
+            # Si l'opération existe, supprimez-la de la base de données
+            c.execute("DELETE FROM operations WHERE expression = ?;", (expression,))
+            conn.commit()
+            msg = f"L'opération avec l'expression '{expression}' a été supprimée avec succès."
+        else:
+            msg = f"L'opération avec l'expression '{expression}' n'existe pas dans la base de données."
+
+        conn.close()
+        return render_template("result.html", msg=msg)
+
+
 
 #Affichage de la base de données calculateur sur la page HTML 
 @app.route('/list')
@@ -204,3 +211,4 @@ def export_csv():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', debug=True)
+

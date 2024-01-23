@@ -32,11 +32,11 @@ Run
 ```
 $ (venv) python train.py
 ```
-This will dump data.pth file. And then run
-the following command to test it in the console.
-
-
+This will dump data.pth file. And then run the following command to test it in the console.
+```
+$ (venv) python main.py
+```
 Now for deployment follow my tutorial to implement `main.py`
-After implement `main.py` connecte your first site in http://localhost:5000/login 
-and go to register to create the first account in page register: http://localhost:5000/register 
+After implement `main.py` connecte your first site in http://localhost:5000/login  <br>
+and go to register to create the first account in page register: http://localhost:5000/register <br>
 

@@ -1,0 +1,61 @@
+{
+  "intents": [
+    {
+      "tag": "salutation",
+      "patterns": [
+        "Salut",
+        "Bonjour",
+        "Comment ça va",
+        "Y a-t-il quelqu'un ?",
+        "Hello",
+        "Bonne journée"
+      ],
+      "responses": [
+        "Salut :-)",
+        "Bonjour, merci de votre visite",
+        "Salut, que puis-je faire pour vous ?",
+        "Salut, comment puis-je vous aider ?"
+      ]
+    },
+    {
+      "tag": "au revoir",
+      "patterns": ["Au revoir", "À plus tard", "Adieu"],
+      "responses": [
+        "À plus tard, merci de votre visite",
+        "Bonne journée",
+        "Au revoir ! Revenez bientôt."
+      ]
+    },
+    {
+      "tag": "merci",
+      "patterns": ["Merci", "Merci beaucoup", "C'est utile", "Merci beaucoup !"],
+      "responses": ["Heureux d'aider !", "À tout moment !", "Avec plaisir"]
+    },
+    {
+      "tag": "paiements",
+      "patterns": [
+        "Acceptez-vous les cartes de crédit ?",
+        "Acceptez-vous Mastercard ?",
+        "Puis-je payer avec Paypal ?",
+        "Acceptez-vous uniquement l'argent liquide ?"
+      ],
+      "responses": [
+        "Nous acceptons VISA, Mastercard et Paypal",
+        "Nous acceptons la plupart des cartes de crédit majeures et Paypal"
+      ]
+    },
+    {
+      "tag": "operations_mathematiques",
+      "patterns": [
+        "Comment on rentre les opérations ?",
+        "Pourquoi ça ne marche pas ?", 
+        "Comment ça marche ?"
+      ],
+      "responses": [
+        "Veuillez réessayer en mettant deux valeurs et une opération entre deux espaces",
+        "Vous devez insérer au moins deux valeurs et une opération mathématique entre deux espaces",
+        "Les opérations autorisées sont (+, -, *, %, /) et des parenthèses ()"
+      ]
+    }
+  ]
+}

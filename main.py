@@ -1,7 +1,8 @@
-from flask import Flask, send_file, request, render_template, redirect, url_for, flash, session
+from flask import Flask, send_file, request, render_template, redirect, url_for, flash, session, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from calcule import calculatrice
+from chat import get_response
 import sqlite3
 import csv
 
@@ -14,7 +15,7 @@ curl -X GET http://localhost:5000/export_csv
 """
 
 app = Flask(__name__, template_folder='template')
-app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a random secret key
+app.config['SECRET_KEY'] = 'my_secret_key'  # Change this to a random secret key
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -74,7 +75,7 @@ def register():
 
 
         # Vous devez hasher le mot de passe avant de le stocker dans la base de données
-        hashed_password = generate_password_hash(password, method='sha256')
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
         with sqlite3.connect("accounts.db") as con:
             cur = con.cursor()
@@ -120,7 +121,7 @@ def home():
     else:
         return redirect(url_for('login'))
 
-#Page insertion des opérations pour effectuer le calculateur NPI
+#Page insertion des opérations pour effectuer le calculateur 
 @app.route('/insert')
 @login_required
 def insert():
@@ -169,8 +170,7 @@ def delete_operation():
 
         conn.close()
         return render_template("result.html", msg=msg)
-
-
+    
 
 #Affichage de la base de données calculateur sur la page HTML 
 @app.route('/list')
@@ -203,11 +203,21 @@ def export_csv():
 
     return send_file('operations.csv')
 
+@app.get("/insert")
+@login_required
+def index_get(): 
+    return render_template("insert.html")
 
+@app.post("/predict")
+@login_required
+def predict():
+    text = request.get_json().get("message")
+    response = get_response(text)
+    message = {"answer":response}
+    return jsonify(message)
 
 
 # Your existing routes go here
-
 
 if __name__ == '__main__':
     app.run('0.0.0.0', debug=True)

@@ -38,6 +38,7 @@ numpy==1.26.3
 packaging==23.2
 pillow==10.2.0
 protobuf==3.20.3
+psycopg2==2.9.9
 pyasn1==0.5.1
 pyasn1-modules==0.3.0
 pycparser==2.21

@@ -37,7 +37,9 @@ This will dump data.pth file. And then run the following command to test it in t
 You need to install postgresql to configure your setup connexion
 https://www.postgresql.org/download/
 
-Run to create two databases in you server
+Then you need to configure your database name, your user and your password in script create_postgre.py 
+
+Run to create two tables (users and operations)in database 
 ```
 $ (venv) python create_postgre.py
 ```

@@ -112,15 +112,6 @@ def evaluate():
     conn.commit() 
     return {'result': result}
 
-#Affichage de la base de données calculateur 
-@app.route('/api/affichage')
-def affichage():
-    conn = get_db_connection()
-    c = conn.cursor()
-    c.execute("SELECT * FROM operations")
-    rows = c.fetchall()
-    conn.commit()
-    return rows
 
 """
 Application avec l'interface web
@@ -183,7 +174,25 @@ def delete_operation():
 
         conn.close()
         return render_template("result.html", msg=msg)
-    
+        
+@app.route('/delete_all_operations', methods=['POST'])
+@login_required
+def delete_all_operations():
+    if request.method == 'POST':
+        conn = get_db_connection()
+        c = conn.cursor()
+        try:
+            # Supprimez toutes les opérations de la base de données
+            c.execute("DELETE FROM operations;")
+            conn.commit()
+            msg = "Toutes les opérations ont été supprimées avec succès."
+        except Exception as e:
+            msg = f"Erreur lors de la suppression de toutes les opérations: {str(e)}"
+            conn.rollback()
+        finally:
+            conn.close()
+            return render_template("result.html", msg=msg)
+
 
 #Affichage de la base de données calculateur sur la page HTML 
 @app.route('/list')
@@ -191,7 +200,7 @@ def delete_operation():
 def list():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM operations;")
+    cur.execute("SELECT id, expression, result, to_char(created_at, 'YYYY-MM-DD HH24:MI:SS') FROM operations ORDER BY created_at DESC")
     rows = cur.fetchall()
     return render_template('database.html',rows=rows)
 
@@ -202,13 +211,13 @@ def list():
 def export_csv():
     conn = get_db_connection()
     c = conn.cursor()
-    c.execute("SELECT * FROM operations")
+    c.execute("SELECT id, expression, result, to_char(created_at, 'YYYY-MM-DD HH24:MI:SS') FROM operations ORDER BY created_at DESC")
     rows = c.fetchall()
     conn.close() 
     
     with open('operations.csv','w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['expression', 'resultat'])
+        writer.writerow(['expression', 'resultat','date_et_heure'])
         for row in rows:
             writer.writerow(row)
 

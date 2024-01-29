@@ -1,4 +1,5 @@
 import psycopg2
+from datetime import datetime
 
 def create_operations_table():
     conn = psycopg2.connect(
@@ -8,10 +9,13 @@ def create_operations_table():
         host="localhost",
         port="5432",
         client_encoding="UTF8"
-        )
+    )
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS operations
-                    (expression TEXT, result REAL)""")
+                    (id SERIAL PRIMARY KEY,
+                     expression TEXT,
+                     result REAL,
+                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
     conn.commit()
     conn.close()
 
@@ -32,11 +36,13 @@ def create_users_table():
             lastname VARCHAR(255) NOT NULL,
             username VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
-            password VARCHAR(255) NOT NULL
+            password VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
     conn.commit()
     conn.close()
+
 
 def add_data():
     conn = psycopg2.connect(
@@ -54,7 +60,7 @@ def add_data():
     conn.commit()
     conn.close()
 
+# Appel des fonctions pour créer les tables
+create_operations_table()
+create_users_table()
 
-#create_operations_table()
-#create_users_table()
-#add_data()

@@ -78,7 +78,7 @@
 }
 </style>
 <body>
-    <form method="post" action="{{ url_for('login') }}">
+    <form method="post" action="{{ url_for('register') }}">
     <div class="container">
         <div class="row mt-5">
           <div class="spContainer mx-auto">
@@ -99,12 +99,12 @@
               </div>
               <div class="d-inline text-center mb-3">
                 <div class="form-group mx-auto">
-                    <input type="text" class="form-control" name="email" placeholder="email" required>
+                    <input type="text" class="form-control" name="username" placeholder="username" required>
                 </div>
               </div>
               <div class="d-inline text-center mb-3">
                 <div class="form-group mx-auto">
-                    <input type="text" class="form-control" name="username" placeholder="username" required>
+                    <input type="text" class="form-control" name="email" placeholder="email" required>
                 </div>
               </div>
               <div class="d-inline text-center mb-3">
@@ -133,7 +133,7 @@
       </button>
                 </div>
                 <h2 class="mt-3">Revenir vers la page login</h2>
-                <a href="login" class="btn btn-link">Login</a>
+                <a href="/login" class="btn btn-link">Login</a>
               </div>
                 <div class="d-inline text-left mt-3">
 

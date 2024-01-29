@@ -3,7 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from calcule import calculatrice
 from chat import get_response
-import sqlite3
+import psycopg2
 import csv
 
 
@@ -30,6 +30,17 @@ class User(UserMixin):
 def load_user(user_id):
     return User(user_id)
 
+def get_db_connection():
+    conn = psycopg2.connect(
+        dbname="calculateur",
+        user="postgres",
+        password="vincent94",
+        host="localhost",
+        port="5432",
+        client_encoding="UTF8"
+    )
+    return conn
+
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -38,18 +49,18 @@ def login():
         password = request.form['password']
 
         # Vous devez vérifier les informations d'identification dans votre base de données
-        with sqlite3.connect("accounts.db") as con:
-            cur = con.cursor()
-            cur.execute("SELECT username, password FROM users WHERE username = ?;", (username,))
-            user_data = cur.fetchone()
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT username, password FROM users WHERE username = %s;", (username,))
+        user_data = cur.fetchone()
 
-            if user_data and check_password_hash(user_data[1], password):
-                session['username'] = request.form['username']
-                user = User(user_id=username)
-                login_user(user)
-                return redirect(url_for('home'))  # Fix here
-            else:
-                flash("Invalid username or password", "error")  # Flash message for error
+        if user_data and check_password_hash(user_data[1], password):
+            session['username'] = request.form['username']
+            user = User(user_id=username)
+            login_user(user)
+            return redirect(url_for('home'))  # Fix here
+        else:
+            flash("Invalid username or password", "error")  # Flash message for error
 
     return render_template('login.html')
 
@@ -64,23 +75,26 @@ def logout():
 
 
 # Registration route
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         firstname = request.form['firstname']
         lastname = request.form['lastname']
-        email = request.form['email']
         username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-
 
         # Vous devez hasher le mot de passe avant de le stocker dans la base de données
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
-        with sqlite3.connect("accounts.db") as con:
-            cur = con.cursor()
-            cur.execute("INSERT INTO users (firstname,lastname,email, username, password) VALUES (?,?,?,?,?);", (firstname,lastname,email,username, hashed_password))
-            con.commit()
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO users (firstname, lastname, username, email, password)' 
+                    'VALUES (%s, %s, %s, %s, %s)', 
+                    (firstname,lastname,username,email, hashed_password))
+        conn.commit()
+        cur.close()
+        conn.close()
 
         return redirect(url_for('login'))
 
@@ -89,19 +103,19 @@ def register():
 #Insertion des opérations et des résultats sur la base de données calculateur 
 @app.route('/evaluate', methods=['POST'])
 def evaluate():
-    conn = sqlite3.connect('calculateur.db')
+    conn = get_db_connection()
     c = conn.cursor()
     data = request.get_json()
     expression = data['expression']
     result = calculatrice(expression)
-    c.execute("INSERT INTO operations VALUES (?, ?);", (expression, result))
+    c.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
     conn.commit() 
     return {'result': result}
 
 #Affichage de la base de données calculateur 
 @app.route('/api/affichage')
 def affichage():
-    conn = sqlite3.connect('calculateur.db')
+    conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT * FROM operations")
     rows = c.fetchall()
@@ -135,14 +149,14 @@ def add_operations():
         try:
             expression = request.form['expression']
             result = calculatrice(expression)
-            with sqlite3.connect("calculateur.db") as con:
-                cur = con.cursor()
-                cur.execute("INSERT INTO operations VALUES (?, ?);", (expression, result))
-            con.commit()
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
+            conn.commit()
             msg = "Opération Succès ! Votre opération est enregistrée "
         except:
             msg = "Erreur à l'insertion"
-            con.rollback()
+            conn.rollback()
         finally:
             return render_template("result.html",msg = msg)
         
@@ -152,17 +166,16 @@ def add_operations():
 def delete_operation():
     if request.method == 'POST':
         expression = request.form['expression']
-
-        conn = sqlite3.connect('calculateur.db')
+        conn = get_db_connection()
         c = conn.cursor()
 
         # Vérifiez d'abord si l'opération existe dans la base de données
-        c.execute("SELECT * FROM operations WHERE expression = ?;", (expression,))
+        c.execute("SELECT * FROM operations WHERE expression = %s;", (expression,))
         existing_operation = c.fetchone()
 
         if existing_operation:
             # Si l'opération existe, supprimez-la de la base de données
-            c.execute("DELETE FROM operations WHERE expression = ?;", (expression,))
+            c.execute("DELETE FROM operations WHERE expression = %s;", (expression,))
             conn.commit()
             msg = f"L'opération avec l'expression '{expression}' a été supprimée avec succès."
         else:
@@ -176,9 +189,8 @@ def delete_operation():
 @app.route('/list')
 @login_required
 def list():
-    con = sqlite3.connect("calculateur.db")
-    con.row_factory = sqlite3.Row #Affichage ligne par ligne sur notre page HTML
-    cur = con.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     cur.execute("SELECT * FROM operations;")
     rows = cur.fetchall()
     return render_template('database.html',rows=rows)
@@ -188,11 +200,10 @@ def list():
 @app.route('/export_csv',methods =["GET"])
 @login_required
 def export_csv():
-    conn = sqlite3.connect('calculateur.db')
+    conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT * FROM operations")
     rows = c.fetchall()
-    print(rows)
     conn.close() 
     
     with open('operations.csv','w', newline='') as file:

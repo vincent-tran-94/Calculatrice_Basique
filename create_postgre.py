@@ -1,7 +1,6 @@
 import psycopg2
-from datetime import datetime
 
-def create_operations_table():
+def get_db_connection():
     conn = psycopg2.connect(
         dbname="calculateur",
         user="postgres",
@@ -10,6 +9,10 @@ def create_operations_table():
         port="5432",
         client_encoding="UTF8"
     )
+    return conn
+
+def create_operations_table():
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS operations
                     (id SERIAL PRIMARY KEY,
@@ -20,14 +23,7 @@ def create_operations_table():
     conn.close()
 
 def create_users_table():
-    conn = psycopg2.connect(
-        dbname='calculateur',
-        user='postgres',
-        password="vincent94",
-        host='localhost',
-        port='5432',
-        client_encoding="UTF8"
-    )
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
@@ -45,14 +41,7 @@ def create_users_table():
 
 
 def add_data():
-    conn = psycopg2.connect(
-        dbname='calculateur',
-        user='postgres',
-        password="vincent94",
-        host='localhost',
-        port='5432',
-        client_encoding="UTF8"
-    )
+    conn = get_db_connection()
     cur = conn.cursor()
     cur.execute('INSERT INTO users (firstname,lastname,username,email,password)' 
                 'VALUES (%s,%s,%s,%s,%s)',

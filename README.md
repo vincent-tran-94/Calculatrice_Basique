@@ -39,7 +39,7 @@ https://www.postgresql.org/download/
 
 Then you need to configure your database name, your user and your password in script create_postgre.py 
 
-Run to create two tables (users and operations)in database 
+Run to create two tables (users and operations) in database 
 ```
 $ (venv) python create_postgre.py
 ```

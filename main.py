@@ -3,15 +3,14 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from calcule import calculatrice
 from chat import get_response
-import psycopg2
+from create_postgre import get_db_connection
 import csv
 
 
 """
-MISE EN TEST sur CURL 
+Tests des opérations et téléchargement du fichier CSV en utilisant CURL
 curl -X POST -H "Content-Type: application/json" -d '{"expression": "2 3 + 5 *"}' http://localhost:5000/evaluate
-curl http://localhost:5000/api/affichage
-curl -X GET http://localhost:5000/export_csv
+curl -X GET http://localhost:5000/export_csv 
 """
 
 app = Flask(__name__, template_folder='template')
@@ -30,16 +29,6 @@ class User(UserMixin):
 def load_user(user_id):
     return User(user_id)
 
-def get_db_connection():
-    conn = psycopg2.connect(
-        dbname="calculateur",
-        user="postgres",
-        password="vincent94",
-        host="localhost",
-        port="5432",
-        client_encoding="UTF8"
-    )
-    return conn
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -113,6 +102,7 @@ def evaluate():
     return {'result': result}
 
 
+
 """
 Application avec l'interface web
 """
@@ -133,6 +123,9 @@ def insert():
    return render_template('insert.html')
 
 #Ajouter les opérations pour reconnaître sur une base de données
+"""
+Renvoie une expression en entrée pour avoir une sortie d'un résultat"
+"""
 @app.route('/add_operations',methods = ['POST'])
 @login_required
 def add_operations():
@@ -149,7 +142,10 @@ def add_operations():
             msg = "Erreur à l'insertion"
             conn.rollback()
         finally:
-            return render_template("result.html",msg = msg)
+            return render_template("insert.html",msg = msg)
+
+
+  
         
 # Ajoutez cette route pour supprimer une opération en utilisant une expression avec la méthode POST
 @app.route('/delete_operation', methods=['POST'])

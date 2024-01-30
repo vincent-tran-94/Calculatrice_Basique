@@ -60,8 +60,53 @@
 </head>
 <body class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2><a href="/" class="btn btn-primary">Revenir à la page d'accueil</a></h2>
+        <h2><a href="/" class="btn btn-primary">Revenir à la page d'accueil</a>
     </div>
+    <div class="d-flex justify-content-between mb-3">
+        <form action="{{ url_for('bin_dec') }}" method="post">
+            <label for="expression">Convert Binary to Decimal</label>
+            <div class="input-group">
+                <input type="text" name="expression" class="form-control" required>
+                <button type="submit" class="btn btn-primary">Summit</button>
+            </div>
+        </form>
+        <form action="{{ url_for('bin_hex') }}" method="post">
+            <label for="expression">Convert Binary to Hexadecimal</label>
+            <div class="input-group">
+                <input type="text" name="expression" class="form-control" required>
+                <button type="submit" class="btn btn-primary">Summit</button>
+            </div>
+        </form>
+        <form action="{{ url_for('dec_bin') }}" method="post">
+            <label for="expression">Convert Decimal to Binary</label>
+            <div class="input-group">
+                <input type="text" name="expression" class="form-control" required>
+                <button type="submit" class="btn btn-primary">Summit</button>
+            </div>
+        </form>
+        <form action="{{ url_for('dec_hex') }}" method="post">
+            <label for="expression">Convert Decimal to Hexadecimal</label>
+            <div class="input-group">
+                <input type="text" name="expression" class="form-control" required>
+                <button type="submit" class="btn btn-primary">Summit</button>
+            </div>
+        </form>
+        <form action="{{ url_for('hex_dec') }}" method="post">
+            <label for="expression">Convert Hexadecimal to Decimal</label>
+            <div class="input-group">
+                <input type="text" name="expression" class="form-control" required>
+                <button type="submit" class="btn btn-primary">Summit</button>
+            </div>
+        </form>
+        <form action="{{ url_for('hex_bin') }}" method="post">
+            <label for="expression">Convert Hexadecimal to Binary</label>
+            <div class="input-group">
+                <input type="text" name="expression" class="form-control" required>
+                <button type="submit" class="btn btn-primary">Summit</button>
+            </div>
+        </form>
+    </div>
+</h2>
     <h3> <form action="{{ url_for('add_operations') }}" method="POST" class="calculator">
         <input type="text" id="expression" class="display" name="expression" readonly>
         <div class="buttons">

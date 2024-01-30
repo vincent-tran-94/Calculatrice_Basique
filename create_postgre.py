@@ -17,7 +17,7 @@ def create_operations_table():
     cursor.execute("""CREATE TABLE IF NOT EXISTS operations
                     (id SERIAL PRIMARY KEY,
                      expression TEXT,
-                     result REAL,
+                     result TEXT,
                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
     conn.commit()
     conn.close()
@@ -51,5 +51,5 @@ def add_data():
 
 # Appel des fonctions pour créer les tables
 create_operations_table()
-create_users_table()
+#create_users_table()
 

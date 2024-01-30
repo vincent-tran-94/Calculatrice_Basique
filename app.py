@@ -1,7 +1,7 @@
 from flask import Flask, send_file, request, render_template, redirect, url_for, flash, session, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from calcule import calculatrice
+from calcule import calculatrice, Converter
 from chat import get_response
 from create_postgre import get_db_connection
 import csv
@@ -28,6 +28,8 @@ class User(UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     return User(user_id)
+
+converter = Converter()
 
 
 # Login route
@@ -88,9 +90,6 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html')
-
-
-
 
 
 """
@@ -158,6 +157,118 @@ def delete_operation():
 
         conn.close()
         return render_template("result.html", msg=msg)
+
+@app.route('/bin_hex',methods = ['POST'])
+@login_required  
+def bin_hex():
+    if request.method == 'POST':
+        try:
+            expression = request.form['expression']
+            result = converter.binary_to_hexadecimal(expression)
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
+            conn.commit()
+            msg = "Opération Succès ! Votre opération est enregistrée "
+        except:
+            msg = "Erreur à l'insertion"
+            conn.rollback()
+        finally:
+            return render_template("insert.html",msg = msg)
+        
+
+@app.route('/bin_dec',methods = ['POST'])
+@login_required  
+def bin_dec():
+    if request.method == 'POST':
+        try:
+            expression = request.form['expression']
+            result = converter.binary_to_decimal(expression)
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
+            conn.commit()
+            msg = "Opération Succès ! Votre opération est enregistrée "
+        except:
+            msg = "Erreur à l'insertion"
+            conn.rollback()
+        finally:
+            return render_template("insert.html",msg = msg)
+        
+
+@app.route('/dec_bin',methods = ['POST'])
+@login_required  
+def dec_bin():
+    if request.method == 'POST':
+        try:
+            expression = request.form['expression']
+            result = converter.decimal_to_binary(int(expression))
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
+            conn.commit()
+            msg = "Opération Succès ! Votre opération est enregistrée "
+        except:
+            msg = "Erreur à l'insertion"
+            conn.rollback()
+        finally:
+            return render_template("insert.html",msg = msg)
+        
+
+@app.route('/dec_hex',methods = ['POST'])
+@login_required  
+def dec_hex():
+    if request.method == 'POST':
+        try:
+            expression = request.form['expression']
+            result = converter.decimal_to_hexadecimal(int(expression))
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
+            conn.commit()
+            msg = "Opération Succès ! Votre opération est enregistrée "
+        except:
+            msg = "Erreur à l'insertion"
+            conn.rollback()
+        finally:
+            return render_template("insert.html",msg = msg)
+        
+@app.route('/hex_bin',methods = ['POST'])
+@login_required  
+def hex_bin():
+    if request.method == 'POST':
+        try:
+            expression = request.form['expression']
+            result = converter.hexadecimal_to_binary(expression)
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
+            conn.commit()
+            msg = "Opération Succès ! Votre opération est enregistrée "
+        except:
+            msg = "Erreur à l'insertion"
+            conn.rollback()
+        finally:
+            return render_template("insert.html",msg = msg)
+        
+@app.route('/hex_dec',methods = ['POST'])
+@login_required  
+def hex_dec():
+    if request.method == 'POST':
+        try:
+            expression = request.form['expression']
+            result = converter.hexadecimal_to_decimal(expression)
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
+            conn.commit()
+            msg = "Opération Succès ! Votre opération est enregistrée "
+        except:
+            msg = "Erreur à l'insertion"
+            conn.rollback()
+        finally:
+            return render_template("insert.html",msg = msg)
+    
         
 @app.route('/delete_all_operations', methods=['POST'])
 @login_required

@@ -50,25 +50,19 @@
         .calculator button:hover {
             background-color: #777;
         }
+        .alert {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+        }
     </style>
 </head>
 <body class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2><a href="/home" class="btn btn-primary">Revenir à la page d'accueil</a></h2>
-        <form action="{{ url_for('delete_all_operations') }}" method="post">
-            <button type="submit" class="btn btn-primary">Supprimer tout les opérations</button>
-        </form>
-
-        <form action="{{ url_for('delete_operation') }}" method="post">
-            <div class="mb-3">
-                <label for="expression">Ecrire votre expression à supprimer</label>
-                <input type="text" name="expression" required>
-                <button type="submit"  class="btn btn-primary" >Supprimer</button>
-            </div>
-        </form>
+        <h2><a href="/" class="btn btn-primary">Revenir à la page d'accueil</a></h2>
     </div>
-
-    <form action="{{ url_for('add_operations') }}" method="POST" class="calculator">
+    <h3> <form action="{{ url_for('add_operations') }}" method="POST" class="calculator">
         <input type="text" id="expression" class="display" name="expression" readonly>
         <div class="buttons">
             <button type="button" onclick="addToExpression('7')">7</button>
@@ -118,10 +112,8 @@
         document.getElementById('expression').value = expression.slice(0, -1);
     }
     </script>
-
+    </h3>
     
-
-
     <div class="container">
         <div class="chatbox">
             <div class="chatbox__support">

@@ -3,15 +3,14 @@ import math
 def calculatrice(expression):
     # Remplacer le symbole '√' par 'math.sqrt'
     expression = expression.replace('√', 'math.sqrt')
+    expression = expression.replace('^', '**')
 
     try:
         result = eval(expression, {'__builtins__': None, 'math': math, 'sin': math.sin, 'cos': math.cos, 'tan': math.tan})
         return result
     except Exception as e:
         return str(e)
-
-
-
+    
 # def calculatrice(expression):
 #     def precedence(operateur):
 #         if operateur == "+" or operateur == "-":

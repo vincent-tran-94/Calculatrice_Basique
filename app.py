@@ -89,17 +89,7 @@ def register():
 
     return render_template('register.html')
 
-#Insertion des opérations et des résultats sur la base de données calculateur 
-@app.route('/evaluate', methods=['POST'])
-def evaluate():
-    conn = get_db_connection()
-    c = conn.cursor()
-    data = request.get_json()
-    expression = data['expression']
-    result = calculatrice(expression)
-    c.execute("INSERT INTO operations (expression,result) VALUES (%s, %s);", (expression, result))
-    conn.commit() 
-    return {'result': result}
+
 
 
 
@@ -107,7 +97,7 @@ def evaluate():
 Application avec l'interface web
 """
 #Page d'accueil 
-@app.route('/home')
+@app.route('/')
 @login_required 
 def home():
     if 'username' in session:

@@ -48,6 +48,6 @@ Run your app Flask
 $ (venv) python main.py
 ```
 Now for deployment follow my tutorial to implement `main.py`
-After implement `main.py` connecte your first site in http://localhost:5000/login  <br>
+After implement `main.py` connect your first site in http://localhost:5000/login  <br>
 and go to register to create the first account in page register: http://localhost:5000/register <br>
 

@@ -51,7 +51,7 @@ def login():
             login_user(user)
             return redirect(url_for('home'))  # Fix here
         else:
-            flash("Invalid username or password", "error")  # Flash message for error
+            flash("Nom d'utilisateur ou mot de passe invalide", "error")  # Flash message for error
 
     return render_template('login.html')
 

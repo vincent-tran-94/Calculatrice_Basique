@@ -61,54 +61,55 @@
 <body class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><a href="/" class="btn btn-primary">Revenir à la page d'accueil</a>
+        </h2> 
     </div>
-    <div class="d-flex justify-content-between mb-3">
-        <form action="{{ url_for('bin_dec') }}" method="post">
-            <label for="expression">Convert Binary to Decimal</label>
-            <div class="input-group">
-                <input type="text" name="expression" class="form-control" required>
-                <button type="submit" class="btn btn-primary">Summit</button>
-            </div>
-        </form>
-        <form action="{{ url_for('bin_hex') }}" method="post">
-            <label for="expression">Convert Binary to Hexadecimal</label>
-            <div class="input-group">
-                <input type="text" name="expression" class="form-control" required>
-                <button type="submit" class="btn btn-primary">Summit</button>
-            </div>
-        </form>
-        <form action="{{ url_for('dec_bin') }}" method="post">
-            <label for="expression">Convert Decimal to Binary</label>
-            <div class="input-group">
-                <input type="text" name="expression" class="form-control" required>
-                <button type="submit" class="btn btn-primary">Summit</button>
-            </div>
-        </form>
-        <form action="{{ url_for('dec_hex') }}" method="post">
-            <label for="expression">Convert Decimal to Hexadecimal</label>
-            <div class="input-group">
-                <input type="text" name="expression" class="form-control" required>
-                <button type="submit" class="btn btn-primary">Summit</button>
-            </div>
-        </form>
-        <form action="{{ url_for('hex_dec') }}" method="post">
-            <label for="expression">Convert Hexadecimal to Decimal</label>
-            <div class="input-group">
-                <input type="text" name="expression" class="form-control" required>
-                <button type="submit" class="btn btn-primary">Summit</button>
-            </div>
-        </form>
-        <form action="{{ url_for('hex_bin') }}" method="post">
-            <label for="expression">Convert Hexadecimal to Binary</label>
-            <div class="input-group">
-                <input type="text" name="expression" class="form-control" required>
-                <button type="submit" class="btn btn-primary">Summit</button>
-            </div>
-        </form>
-    </div>
-</h2>
-    <h3> <form action="{{ url_for('add_operations') }}" method="POST" class="calculator">
-        <input type="text" id="expression" class="display" name="expression" readonly>
+    <h3>
+    <form action="{{ url_for('bin_dec') }}" method="post">
+        <label for="expression">Convert Binary to Decimal</label>
+        <div class="input-group">
+            <input type="text" name="expression" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Summit</button>
+        </div>
+    </form>
+    <form action="{{ url_for('bin_hex') }}" method="post">
+        <label for="expression">Conversion Binaire à Hexadecimal</label>
+        <div class="input-group">
+            <input type="text" name="expression" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Summit</button>
+        </div>
+    </form>
+    <form action="{{ url_for('dec_bin') }}" method="post">
+        <label for="expression">Conversion Decimal à Binaire</label>
+        <div class="input-group">
+            <input type="text" name="expression" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Summit</button>
+        </div>
+    </form>
+    <form action="{{ url_for('dec_hex') }}" method="post">
+        <label for="expression">Conversion Decimal à Hexadecimal</label>
+        <div class="input-group">
+            <input type="text" name="expression" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Summit</button>
+        </div>
+    </form>
+    <form action="{{ url_for('hex_dec') }}" method="post">
+        <label for="expression">Conversion Hexadecimal à Decimal</label>
+        <div class="input-group">
+            <input type="text" name="expression" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Summit</button>
+        </div>
+    </form>
+    <form action="{{ url_for('hex_bin') }}" method="post">
+        <label for="expression">Conversion Hexadecimal à Binaire</label>
+        <div class="input-group">
+            <input type="text" name="expression" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Summit</button>
+        </div>
+    </form>
+</div>
+</h3>
+    <h4> <form action="{{ url_for('add_operations') }}" method="POST" class="calculator">
+        <input type="text" id="expression" class="display" name="expression" required>
         <div class="buttons">
             <button type="button" onclick="addToExpression('7')">7</button>
             <button type="button" onclick="addToExpression('8')">8</button>
@@ -135,7 +136,7 @@
             <button type="button" onclick="clearAll()">CE</button>
             <button type="button" onclick="addToExpression('(')">(</button>
             <button type="button" onclick="addToExpression(')')">)</button>
-            <button type="submit" class="btn btn-primary" style="grid-column: span 2;"> Soumettre</button>
+            <button type="submit" class="btn btn-primary" style="grid-column: span 2;"> Soumettre </button>
         </div>
         {% if msg %}
         <div class="alert alert-primary" role="alert">
@@ -157,7 +158,7 @@
         document.getElementById('expression').value = expression.slice(0, -1);
     }
     </script>
-    </h3>
+    </h4>
     
     <div class="container">
         <div class="chatbox">

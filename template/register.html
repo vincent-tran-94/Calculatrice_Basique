@@ -76,6 +76,7 @@
 .btn-sm:hover{
   font-weight:900;
 }
+
 </style>
 <body>
     <form method="post" action="{{ url_for('register') }}">
@@ -89,27 +90,27 @@
               </div>
               <div class="d-inline text-center mb-0">
                 <div class="form-group mx-auto">
-                    <input type="text" class="form-control" name="firstname" placeholder="firstname" required>
+                    <input type="text" class="form-control" name="firstname" placeholder="Prénom" required>
                 </div>
               </div>
               <div class="d-inline text-center mb-3">
                 <div class="form-group mx-auto">
-                    <input type="text" class="form-control" name="lastname" placeholder="lastname" required>
+                    <input type="text" class="form-control" name="lastname" placeholder="Nom" required>
                 </div>
               </div>
               <div class="d-inline text-center mb-3">
                 <div class="form-group mx-auto">
-                    <input type="text" class="form-control" name="username" placeholder="username" required>
+                    <input type="text" class="form-control" name="username" placeholder="Nom d'utilisateur" required>
                 </div>
               </div>
               <div class="d-inline text-center mb-3">
                 <div class="form-group mx-auto">
-                    <input type="text" class="form-control" name="email" placeholder="email" required>
+                    <input type="text" class="form-control" name="email" placeholder="Email" required>
                 </div>
               </div>
               <div class="d-inline text-center mb-3">
                 <div class="form-group mx-auto">
-                    <input type="password" class="form-control" name="password" placeholder="password" required>
+                    <input type="password" class="form-control" name="password" placeholder="Mot de passe" required>
                 </div>
               </div>
               <div class="d-inline text-left mb-3">
@@ -131,12 +132,10 @@
                    <button type="button" class="btn btn-sm btn-light ml-2"> <span class="badge text-white"><i class="fab fa-facebook-f text-primary"></i></span>
         Facebook
       </button>
-                </div>
-                <h2 class="mt-3">Revenir vers la page login</h2>
-                <a href="/login" class="btn btn-link">Login</a>
+                </div> 
+                <a href="/login" class="text-black font-weight-bold regStr"> Revenir vers la page connexion</a>
               </div>
                 <div class="d-inline text-left mt-3">
-
                 </div>
               </div>
             </div>

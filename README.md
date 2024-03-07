@@ -5,15 +5,15 @@ L'objectif de ce site est de calculer les différents opérations par une expres
 de stocker dans les différents bases de données sur les opérations et les comptes qui ont été créés.
 Le chatbot va nous indiquer comment marche la fonctionnalité de la calculatrice.
 
-Ce projet va me permettre de comprendre les différents fonctionnnalités de base du backend pour la première création du site web avec de l'Intelligence Artificielle.
-![Page_login](https://github.com/vincent-tran-94/Web_Calculatrice_Chatbot/assets/73304946/2a46ee08-0e3e-44e3-9a35-3f579714ee2e)
-<p style="text-align: center;"> Première page de connexion </p>
+Ce projet va me permettre de comprendre les différents fonctionnnalités de base du backend pour la première création du site web avec de l'Intelligence Artificielle. <br>
+![Page_login](https://github.com/vincent-tran-94/Web_Calculatrice_Chatbot/assets/73304946/2a46ee08-0e3e-44e3-9a35-3f579714ee2e) <br>
+<p style="text-align: center;"> Première page de connexion </p> <br>
 
-![Page_Inscription](https://github.com/vincent-tran-94/Web_Calculatrice_Chatbot/assets/73304946/6a556837-4110-4396-b63a-c1924704969a)
-<p style="text-align: center;"> Page d'inscription </p>
+![Page_Inscription](https://github.com/vincent-tran-94/Web_Calculatrice_Chatbot/assets/73304946/6a556837-4110-4396-b63a-c1924704969a) <br>
+<p style="text-align: center;"> Page d'inscription </p> <br>
 
-![Interface_web](https://github.com/vincent-tran-94/Web_Calculatrice_Chatbot/assets/73304946/3a85ace5-d589-4dce-858a-81d7573394e6)
-<p style="text-align: center;"> Interface d'application de la calculatrice + conversations intégré un chatbot </p>
+![Interface_web](https://github.com/vincent-tran-94/Web_Calculatrice_Chatbot/assets/73304946/3a85ace5-d589-4dce-858a-81d7573394e6) <br>
+<p style="text-align: center;"> Interface d'application de la calculatrice + conversations intégré un chatbot </p> <br>
 
 ## Installation for setup:
 This repo currently contains the starter files.
